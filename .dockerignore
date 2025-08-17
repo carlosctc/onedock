@@ -1,0 +1,73 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+README_zh.md
+CHANGELOG.md
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+LICENSE
+
+# Development files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+onedock
+onedock.exe
+/bin/
+/build/
+/dist/
+*.tar.gz
+*.zip
+
+# Logs
+*.log
+logs/
+/logs
+
+# Config files (keep only template)
+config_dev.toml
+config_pro.toml
+
+# Test files
+coverage.out
+coverage.html
+*.test
+
+# Development scripts
+make.sh
+dev.sh
+
+# Temporary files
+*.tmp
+*.temp
+._*
+.nfs.*
+*.orig
+*.rej
+
+# Cache directories
+.cache/
+/.claude/
+todo.md
+CLAUDE.md
+
+# Docker files
+docker-compose.yml
+docker-compose.override.yml
+.env
+
+# GitHub
+.github/
+
+# Node modules (if any)
+node_modules/

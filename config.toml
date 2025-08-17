@@ -1,0 +1,28 @@
+[local]
+address = ":8801" # host and port
+debug   = true    # debug mode for Gin
+
+[local.logger]
+dir   = "./logs" #日志路径
+name   = "log.log" #日志路径
+access = true # 是否记录access日志
+level = "INFO"
+max_size = 1  #每个日志文件保存的最大尺寸 单位：M
+max_backups = 5 #文件最多保存多少天
+max_age = 7 #日志文件最多保存多少个备份
+
+[swaggerui]
+show = true #是否显示文档
+protocol = "http"
+host = "127.0.0.1" #访问地址
+address = ":8801" # host and port
+
+
+[container]
+# 容器命名配置
+prefix = "onedock"  # 容器名称前缀
+internal_port_start = 30000 #内部开始端口
+cache_ttl = 300 # 单位妙
+# 负载均衡策略: round_robin(轮询) / least_connections(最少连接) / weighted(权重)
+load_balance_strategy = "round_robin"
+

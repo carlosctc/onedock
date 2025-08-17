@@ -1,0 +1,813 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/onedock": {
+            "get": {
+                "description": "获取系统中所有部署的服务列表，包括服务基本信息、状态和副本数量",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "服务管理"
+                ],
+                "summary": "列出所有服务",
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "Services": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/models.Service"
+                                            }
+                                        },
+                                        "Total": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "部署新的服务或更新现有服务配置，支持容器镜像、端口映射、环境变量、卷挂载等完整配置",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "服务管理"
+                ],
+                "summary": "部署或更新服务",
+                "parameters": [
+                    {
+                        "description": "服务配置信息",
+                        "name": "service",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ServiceRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "部署成功",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/models.Service"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "object"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "服务器内部错误",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "object"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/onedock/ping": {
+            "get": {
+                "description": "用于检查 OneDock 服务的健康状态和连通性，返回服务状态信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "系统监控"
+                ],
+                "summary": "健康检查",
+                "responses": {
+                    "200": {
+                        "description": "服务正常运行",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "object"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/onedock/proxy/stats": {
+            "get": {
+                "description": "获取所有端口代理的统计信息，包括单副本代理和负载均衡器的详细状态",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "服务管理"
+                ],
+                "summary": "获取端口代理统计信息",
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "object"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/onedock/{name}": {
+            "get": {
+                "description": "根据服务名称获取服务的详细信息，包括配置、状态等",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "服务管理"
+                ],
+                "summary": "获取指定服务详情",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "服务名称",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/models.Service"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "object"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "服务未找到",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "object"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "删除指定的服务及其所有相关容器和资源，操作不可逆",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "服务管理"
+                ],
+                "summary": "删除指定服务",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "服务名称",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "删除成功",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "object"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "object"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "服务器内部错误",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "object"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/onedock/{name}/scale": {
+            "post": {
+                "description": "调整指定服务的副本数量，支持扩容和缩容操作，实际创建或删除容器实例",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "服务管理"
+                ],
+                "summary": "服务扩缩容",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "服务名称",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "扩缩容配置",
+                        "name": "scale",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ScaleRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "扩缩容成功",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "object"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "object"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "服务器内部错误",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "object"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/onedock/{name}/status": {
+            "get": {
+                "description": "获取指定服务的详细运行状态，包括副本信息、健康状态、实例详情等",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "服务管理"
+                ],
+                "summary": "获取服务运行状态",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "服务名称",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/models.ServiceStatusResponse"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "object"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "服务未找到",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "object"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.ScaleRequest": {
+            "description": "服务扩缩容请求参数",
+            "type": "object",
+            "required": [
+                "replicas"
+            ],
+            "properties": {
+                "replicas": {
+                    "type": "integer",
+                    "example": 3
+                }
+            }
+        },
+        "models.Service": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "example": "2023-01-01T00:00:00Z"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "svc_1234567890"
+                },
+                "image": {
+                    "type": "string",
+                    "example": "nginx"
+                },
+                "internal_port": {
+                    "type": "integer",
+                    "example": 80
+                },
+                "name": {
+                    "type": "string",
+                    "example": "nginx-web"
+                },
+                "public_port": {
+                    "type": "integer",
+                    "example": 30000
+                },
+                "replicas": {
+                    "type": "integer",
+                    "example": 3
+                },
+                "status": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/models.ServiceStatus"
+                        }
+                    ],
+                    "example": "running"
+                },
+                "tag": {
+                    "type": "string",
+                    "example": "alpine"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "example": "2023-01-01T00:00:00Z"
+                }
+            }
+        },
+        "models.ServiceInstanceInfo": {
+            "type": "object",
+            "properties": {
+                "container_id": {
+                    "type": "string",
+                    "example": "abc123def456"
+                },
+                "container_name": {
+                    "type": "string",
+                    "example": "onedock-nginx-1"
+                },
+                "container_port": {
+                    "type": "integer",
+                    "example": 30001
+                },
+                "cpu_usage": {
+                    "type": "number",
+                    "example": 0.5
+                },
+                "created_at": {
+                    "type": "string",
+                    "example": "2023-01-01T00:00:00Z"
+                },
+                "health_status": {
+                    "type": "string",
+                    "example": "healthy"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "inst_1234567890"
+                },
+                "image": {
+                    "type": "string",
+                    "example": "nginx:alpine"
+                },
+                "internal_port": {
+                    "type": "integer",
+                    "example": 80
+                },
+                "ip_address": {
+                    "type": "string",
+                    "example": "172.17.0.2"
+                },
+                "labels": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "memory_limit": {
+                    "type": "number",
+                    "example": 128
+                },
+                "memory_usage": {
+                    "type": "number",
+                    "example": 64.5
+                },
+                "public_port": {
+                    "type": "integer",
+                    "example": 30000
+                },
+                "restart_count": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "service_name": {
+                    "type": "string",
+                    "example": "nginx-web"
+                },
+                "started_at": {
+                    "type": "string",
+                    "example": "2023-01-01T00:00:00Z"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "running"
+                },
+                "uptime": {
+                    "type": "string",
+                    "example": "2h30m"
+                }
+            }
+        },
+        "models.ServiceRequest": {
+            "type": "object",
+            "required": [
+                "image",
+                "internal_port",
+                "name",
+                "tag"
+            ],
+            "properties": {
+                "command": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "env_file": {
+                    "type": "string"
+                },
+                "environment": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "image": {
+                    "type": "string",
+                    "example": "nginx"
+                },
+                "internal_port": {
+                    "type": "integer",
+                    "example": 80
+                },
+                "name": {
+                    "type": "string",
+                    "example": "nginx-web"
+                },
+                "public_port": {
+                    "type": "integer",
+                    "example": 30000
+                },
+                "replicas": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "tag": {
+                    "type": "string",
+                    "example": "alpine"
+                },
+                "volumes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.VolumeMount"
+                    }
+                },
+                "working_dir": {
+                    "type": "string",
+                    "example": "/app"
+                }
+            }
+        },
+        "models.ServiceStatus": {
+            "type": "string",
+            "enum": [
+                "stopped",
+                "starting",
+                "running",
+                "stopping",
+                "failed",
+                "updating"
+            ],
+            "x-enum-varnames": [
+                "StatusStopped",
+                "StatusStarting",
+                "StatusRunning",
+                "StatusStopping",
+                "StatusFailed",
+                "StatusUpdating"
+            ]
+        },
+        "models.ServiceStatusResponse": {
+            "type": "object",
+            "properties": {
+                "access_url": {
+                    "type": "string",
+                    "example": "http://localhost:30000"
+                },
+                "created_at": {
+                    "type": "string",
+                    "example": "2023-01-01T00:00:00Z"
+                },
+                "failed_replicas": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "healthy_replicas": {
+                    "type": "integer",
+                    "example": 3
+                },
+                "instances": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ServiceInstanceInfo"
+                    }
+                },
+                "load_balancer": {
+                    "type": "string",
+                    "example": "round_robin"
+                },
+                "running_replicas": {
+                    "type": "integer",
+                    "example": 2
+                },
+                "service": {
+                    "$ref": "#/definitions/models.Service"
+                },
+                "stopped_replicas": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "total_replicas": {
+                    "type": "integer",
+                    "example": 3
+                },
+                "updated_at": {
+                    "type": "string",
+                    "example": "2023-01-01T00:00:00Z"
+                }
+            }
+        },
+        "models.VolumeMount": {
+            "type": "object",
+            "properties": {
+                "destination": {
+                    "description": "容器内路径",
+                    "type": "string"
+                },
+                "readOnly": {
+                    "description": "是否只读挂载",
+                    "type": "boolean"
+                },
+                "source": {
+                    "description": "主机路径",
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "Dev": {
+            "type": "apiKey",
+            "name": "token",
+            "in": "header"
+        }
+    }
+}

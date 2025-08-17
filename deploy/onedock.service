@@ -1,0 +1,31 @@
+[Unit]
+Description=OneDock Docker Container Orchestration Service
+Documentation=https://github.com/aichy126/onedock
+After=network.target docker.service
+Wants=docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+User=onedock
+Group=onedock
+WorkingDirectory=/opt/onedock
+ExecStart=/opt/onedock/onedock
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=onedock
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/opt/onedock
+
+# Environment
+Environment=GIN_MODE=release
+
+[Install]
+WantedBy=multi-user.target

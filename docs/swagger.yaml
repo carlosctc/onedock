@@ -1,0 +1,549 @@
+definitions:
+  models.ScaleRequest:
+    description: 服务扩缩容请求参数
+    properties:
+      replicas:
+        example: 3
+        type: integer
+    required:
+    - replicas
+    type: object
+  models.Service:
+    properties:
+      created_at:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      id:
+        example: svc_1234567890
+        type: string
+      image:
+        example: nginx
+        type: string
+      internal_port:
+        example: 80
+        type: integer
+      name:
+        example: nginx-web
+        type: string
+      public_port:
+        example: 30000
+        type: integer
+      replicas:
+        example: 3
+        type: integer
+      status:
+        allOf:
+        - $ref: '#/definitions/models.ServiceStatus'
+        example: running
+      tag:
+        example: alpine
+        type: string
+      updated_at:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+    type: object
+  models.ServiceInstanceInfo:
+    properties:
+      container_id:
+        example: abc123def456
+        type: string
+      container_name:
+        example: onedock-nginx-1
+        type: string
+      container_port:
+        example: 30001
+        type: integer
+      cpu_usage:
+        example: 0.5
+        type: number
+      created_at:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      health_status:
+        example: healthy
+        type: string
+      id:
+        example: inst_1234567890
+        type: string
+      image:
+        example: nginx:alpine
+        type: string
+      internal_port:
+        example: 80
+        type: integer
+      ip_address:
+        example: 172.17.0.2
+        type: string
+      labels:
+        additionalProperties:
+          type: string
+        type: object
+      memory_limit:
+        example: 128
+        type: number
+      memory_usage:
+        example: 64.5
+        type: number
+      public_port:
+        example: 30000
+        type: integer
+      restart_count:
+        example: 0
+        type: integer
+      service_name:
+        example: nginx-web
+        type: string
+      started_at:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      status:
+        example: running
+        type: string
+      uptime:
+        example: 2h30m
+        type: string
+    type: object
+  models.ServiceRequest:
+    properties:
+      command:
+        items:
+          type: string
+        type: array
+      env_file:
+        type: string
+      environment:
+        additionalProperties:
+          type: string
+        type: object
+      image:
+        example: nginx
+        type: string
+      internal_port:
+        example: 80
+        type: integer
+      name:
+        example: nginx-web
+        type: string
+      public_port:
+        example: 30000
+        type: integer
+      replicas:
+        example: 1
+        type: integer
+      tag:
+        example: alpine
+        type: string
+      volumes:
+        items:
+          $ref: '#/definitions/models.VolumeMount'
+        type: array
+      working_dir:
+        example: /app
+        type: string
+    required:
+    - image
+    - internal_port
+    - name
+    - tag
+    type: object
+  models.ServiceStatus:
+    enum:
+    - stopped
+    - starting
+    - running
+    - stopping
+    - failed
+    - updating
+    type: string
+    x-enum-varnames:
+    - StatusStopped
+    - StatusStarting
+    - StatusRunning
+    - StatusStopping
+    - StatusFailed
+    - StatusUpdating
+  models.ServiceStatusResponse:
+    properties:
+      access_url:
+        example: http://localhost:30000
+        type: string
+      created_at:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      failed_replicas:
+        example: 0
+        type: integer
+      healthy_replicas:
+        example: 3
+        type: integer
+      instances:
+        items:
+          $ref: '#/definitions/models.ServiceInstanceInfo'
+        type: array
+      load_balancer:
+        example: round_robin
+        type: string
+      running_replicas:
+        example: 2
+        type: integer
+      service:
+        $ref: '#/definitions/models.Service'
+      stopped_replicas:
+        example: 1
+        type: integer
+      total_replicas:
+        example: 3
+        type: integer
+      updated_at:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+    type: object
+  models.VolumeMount:
+    properties:
+      destination:
+        description: 容器内路径
+        type: string
+      readOnly:
+        description: 是否只读挂载
+        type: boolean
+      source:
+        description: 主机路径
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /onedock:
+    get:
+      consumes:
+      - application/json
+      description: 获取系统中所有部署的服务列表，包括服务基本信息、状态和副本数量
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                properties:
+                  Services:
+                    items:
+                      $ref: '#/definitions/models.Service'
+                    type: array
+                  Total:
+                    type: integer
+                type: object
+              msg:
+                type: string
+            type: object
+      summary: 列出所有服务
+      tags:
+      - 服务管理
+    post:
+      consumes:
+      - application/json
+      description: 部署新的服务或更新现有服务配置，支持容器镜像、端口映射、环境变量、卷挂载等完整配置
+      parameters:
+      - description: 服务配置信息
+        in: body
+        name: service
+        required: true
+        schema:
+          $ref: '#/definitions/models.ServiceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 部署成功
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/models.Service'
+              msg:
+                type: string
+            type: object
+        "400":
+          description: 请求参数错误
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+              msg:
+                type: string
+            type: object
+        "500":
+          description: 服务器内部错误
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+              msg:
+                type: string
+            type: object
+      summary: 部署或更新服务
+      tags:
+      - 服务管理
+  /onedock/{name}:
+    delete:
+      consumes:
+      - application/json
+      description: 删除指定的服务及其所有相关容器和资源，操作不可逆
+      parameters:
+      - description: 服务名称
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除成功
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+              msg:
+                type: string
+            type: object
+        "400":
+          description: 请求参数错误
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+              msg:
+                type: string
+            type: object
+        "500":
+          description: 服务器内部错误
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+              msg:
+                type: string
+            type: object
+      summary: 删除指定服务
+      tags:
+      - 服务管理
+    get:
+      consumes:
+      - application/json
+      description: 根据服务名称获取服务的详细信息，包括配置、状态等
+      parameters:
+      - description: 服务名称
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/models.Service'
+              msg:
+                type: string
+            type: object
+        "400":
+          description: 请求参数错误
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+              msg:
+                type: string
+            type: object
+        "404":
+          description: 服务未找到
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+              msg:
+                type: string
+            type: object
+      summary: 获取指定服务详情
+      tags:
+      - 服务管理
+  /onedock/{name}/scale:
+    post:
+      consumes:
+      - application/json
+      description: 调整指定服务的副本数量，支持扩容和缩容操作，实际创建或删除容器实例
+      parameters:
+      - description: 服务名称
+        in: path
+        name: name
+        required: true
+        type: string
+      - description: 扩缩容配置
+        in: body
+        name: scale
+        required: true
+        schema:
+          $ref: '#/definitions/models.ScaleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 扩缩容成功
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+              msg:
+                type: string
+            type: object
+        "400":
+          description: 请求参数错误
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+              msg:
+                type: string
+            type: object
+        "500":
+          description: 服务器内部错误
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+              msg:
+                type: string
+            type: object
+      summary: 服务扩缩容
+      tags:
+      - 服务管理
+  /onedock/{name}/status:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定服务的详细运行状态，包括副本信息、健康状态、实例详情等
+      parameters:
+      - description: 服务名称
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/models.ServiceStatusResponse'
+              msg:
+                type: string
+            type: object
+        "400":
+          description: 请求参数错误
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+              msg:
+                type: string
+            type: object
+        "404":
+          description: 服务未找到
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+              msg:
+                type: string
+            type: object
+      summary: 获取服务运行状态
+      tags:
+      - 服务管理
+  /onedock/ping:
+    get:
+      consumes:
+      - application/json
+      description: 用于检查 OneDock 服务的健康状态和连通性，返回服务状态信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 服务正常运行
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+              msg:
+                type: string
+            type: object
+      summary: 健康检查
+      tags:
+      - 系统监控
+  /onedock/proxy/stats:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有端口代理的统计信息，包括单副本代理和负载均衡器的详细状态
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+              msg:
+                type: string
+            type: object
+      summary: 获取端口代理统计信息
+      tags:
+      - 服务管理
+securityDefinitions:
+  Dev:
+    in: header
+    name: token
+    type: apiKey
+swagger: "2.0"
