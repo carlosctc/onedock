@@ -9,6 +9,63 @@
 
 A powerful Docker container orchestration service built with Go and Gin framework, providing RESTful APIs for deploying, managing, and scaling containerized services with intelligent port proxying and load balancing.
 
+## 🎯 Use Cases & Applications
+
+### 🎯 Target Scenarios
+
+OneDock is designed as a **lightweight container orchestration solution** for **small to medium teams** and **single-machine container deployments**, perfectly bridging the gap between Docker and Kubernetes:
+
+#### 🔥 Core Application Scenarios
+
+**1. Small-Scale Container Orchestration**
+- Container deployment needs for single machine or few servers
+- Don't need K8s complexity, but require stronger API control than Docker Compose
+- Prefer RESTful API management over configuration files
+
+**2. CI/CD Automation & Deployment**
+- Seamless integration with existing CI/CD pipelines through API
+- Support for blue-green deployment and rolling update strategies
+- Real-time deployment monitoring with quick rollback capabilities
+
+**3. Microservices Rapid Prototyping**
+- Quick deployment and testing of microservice architectures
+- Zero-configuration load balancing with automatic service discovery
+- Dynamic scaling to easily validate performance characteristics
+
+**4. Development/Testing Environment Management**
+- Quickly set up consistent testing environments for development teams
+- Fast service version switching through API
+- Transparent resource usage for cost control
+
+#### 🚀 When to Choose OneDock?
+
+✅ **Perfect for OneDock:**
+- Need API-driven container orchestration (not configuration files)
+- Single machine or 2-5 server deployment scale
+- Want zero-configuration load balancing and service discovery
+- Need integration with existing CI/CD systems
+- Want quick setup with 10-minute deployment
+
+❌ **Not suitable for:**
+- Large-scale cluster management (recommend K8s)
+- Complex cross-node network policies
+- Advanced scheduling features (affinity, anti-affinity, etc.)
+- Multi-tenancy and complex permission management
+
+### 💡 Core Advantages
+
+**Simple but Not Simplistic:**
+- Single binary file, 5-minute installation
+- RESTful API design, integrates with any tech stack
+- Intelligent load balancing, auto-adapts to single/multi-replica scenarios
+- Built-in health checks and monitoring, minimal operational burden
+
+**Powerful yet Flexible:**
+- Rolling updates ensure service continuity
+- Dynamic scaling without service restart
+- Complete Swagger documentation with online testing
+- Multiple load balancing strategies for different performance needs
+
 ## ✨ Features
 
 - **🚀 Container Lifecycle Management**: Deploy, update, delete, and scale containerized services
