@@ -428,11 +428,6 @@ func (dc *DockerClient) ScaleService(ctx context.IContext, serviceName string, t
 
 	currentReplicas := len(serviceContainers)
 
-	// 如果副本数相同，无需操作
-	if currentReplicas == targetReplicas {
-		return nil
-	}
-
 	// 第二步：从其中一个容器提取Service配置
 	serviceConfig, err := dc.ExtractServiceFromContainer(serviceContainers[0])
 	if err != nil {

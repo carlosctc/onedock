@@ -66,16 +66,9 @@ func (s *Service) UpdateService(ctx context.IContext, req *models.ServiceRequest
 		return nil, fmt.Errorf("failed to extract old service configuration")
 	}
 
-	// 第五步：比较配置，检查是否需要更新
-	hasChanges := s.dockerClient.CompareServiceConfig(oldDockerService, newDockerService)
-	if !hasChanges {
-		log.Info("Docker", log.Any("ServiceName", req.Name), log.Any("Message", "服务配置无变化，返回现有服务"))
-		return existingService, nil
-	}
-
 	log.Info("Docker", log.Any("ServiceName", req.Name), log.Any("Message", "检测到配置变化，开始滚动更新"))
 
-	// 第六步：逐个更新容器
+	// 第五步：逐个更新容器
 	successCount := 0
 
 	for _, container := range serviceContainers {
@@ -107,7 +100,7 @@ func (s *Service) UpdateService(ctx context.IContext, req *models.ServiceRequest
 			log.Any("Success", successCount), log.Any("Message", "部分容器更新失败"))
 	}
 
-	// 第七步：更新端口代理
+	// 第六步：更新端口代理
 
 	//删除缓存
 	s.DelContainerMapping(ctx, existingService.PublicPort)
@@ -118,7 +111,7 @@ func (s *Service) UpdateService(ctx context.IContext, req *models.ServiceRequest
 		// 端口代理更新失败不影响服务更新结果，记录日志即可
 	}
 
-	// 第八步：返回更新后的服务信息
+	// 第七步：返回更新后的服务信息
 	updatedService := &models.Service{
 		ID:           existingService.ID,
 		Name:         req.Name,

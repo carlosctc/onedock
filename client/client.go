@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 	"strings"
 	"time"
 )
@@ -150,21 +149,6 @@ func (c *Client) parseResponse(resp *http.Response, result interface{}) error {
 	}
 
 	return nil
-}
-
-// buildURL 构建带查询参数的 URL
-func (c *Client) buildURL(endpoint string, params map[string]string) string {
-	if len(params) == 0 {
-		return endpoint
-	}
-
-	u, _ := url.Parse(endpoint)
-	q := u.Query()
-	for key, value := range params {
-		q.Set(key, value)
-	}
-	u.RawQuery = q.Encode()
-	return u.String()
 }
 
 // GetBaseURL 获取基础 URL
