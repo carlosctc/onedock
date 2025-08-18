@@ -9,10 +9,13 @@ func Router(r *gin.Engine) {
 	r.Use(middleware.Cors())
 	api := NewApi()
 
+	// ping 接口不需要权限验证（健康检查）
 	r.GET("/onedock/ping", api.Ping)
 	r.POST("/onedock/ping", api.Ping)
 
+	// 需要权限验证的服务接口
 	services := r.Group("/onedock")
+	services.Use(middleware.Auth()) // 应用权限验证中间件
 	services.POST("/", api.DeployOrUpdateService)       // 部署或更新服务
 	services.GET("/", api.ListServices)                 // 列出所有服务
 	services.GET("/:name", api.GetService)              // 获取服务

@@ -17,6 +17,13 @@ const docTemplate = `{
     "paths": {
         "/onedock": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": [],
+                        "QueryAuth": [],
+                        "TokenAuth": []
+                    }
+                ],
                 "description": "获取系统中所有部署的服务列表，包括服务基本信息、状态和副本数量",
                 "consumes": [
                     "application/json"
@@ -56,10 +63,34 @@ const docTemplate = `{
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "权限验证失败",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "object"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
                     }
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": [],
+                        "QueryAuth": [],
+                        "TokenAuth": []
+                    }
+                ],
                 "description": "部署新的服务或更新现有服务配置，支持容器镜像、端口映射、环境变量、卷挂载等完整配置",
                 "consumes": [
                     "application/json"
@@ -102,6 +133,23 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "请求参数错误",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "object"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "权限验证失败",
                         "schema": {
                             "type": "object",
                             "properties": {
@@ -173,6 +221,13 @@ const docTemplate = `{
         },
         "/onedock/proxy/stats": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": [],
+                        "QueryAuth": [],
+                        "TokenAuth": []
+                    }
+                ],
                 "description": "获取所有端口代理的统计信息，包括单副本代理和负载均衡器的详细状态",
                 "consumes": [
                     "application/json"
@@ -201,12 +256,36 @@ const docTemplate = `{
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "权限验证失败",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "object"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
                     }
                 }
             }
         },
         "/onedock/{name}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": [],
+                        "QueryAuth": [],
+                        "TokenAuth": []
+                    }
+                ],
                 "description": "根据服务名称获取服务的详细信息，包括配置、状态等",
                 "consumes": [
                     "application/json"
@@ -262,6 +341,23 @@ const docTemplate = `{
                             }
                         }
                     },
+                    "401": {
+                        "description": "权限验证失败",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "object"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
                     "404": {
                         "description": "服务未找到",
                         "schema": {
@@ -282,6 +378,13 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": [],
+                        "QueryAuth": [],
+                        "TokenAuth": []
+                    }
+                ],
                 "description": "删除指定的服务及其所有相关容器和资源，操作不可逆",
                 "consumes": [
                     "application/json"
@@ -337,6 +440,23 @@ const docTemplate = `{
                             }
                         }
                     },
+                    "401": {
+                        "description": "权限验证失败",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "object"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
@@ -359,6 +479,13 @@ const docTemplate = `{
         },
         "/onedock/{name}/scale": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": [],
+                        "QueryAuth": [],
+                        "TokenAuth": []
+                    }
+                ],
                 "description": "调整指定服务的副本数量，支持扩容和缩容操作，实际创建或删除容器实例",
                 "consumes": [
                     "application/json"
@@ -423,6 +550,23 @@ const docTemplate = `{
                             }
                         }
                     },
+                    "401": {
+                        "description": "权限验证失败",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "object"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
@@ -445,6 +589,13 @@ const docTemplate = `{
         },
         "/onedock/{name}/status": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": [],
+                        "QueryAuth": [],
+                        "TokenAuth": []
+                    }
+                ],
                 "description": "获取指定服务的详细运行状态，包括副本信息、健康状态、实例详情等",
                 "consumes": [
                     "application/json"
@@ -485,6 +636,23 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "请求参数错误",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "object"
+                                },
+                                "msg": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "权限验证失败",
                         "schema": {
                             "type": "object",
                             "properties": {
@@ -815,9 +983,22 @@ const docTemplate = `{
         }
     },
     "securityDefinitions": {
-        "Dev": {
+        "BearerAuth": {
+            "description": "Enter the token with the ` + "`" + `Bearer: ` + "`" + ` prefix, e.g. \"Bearer abcde12345\".",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        },
+        "QueryAuth": {
+            "description": "Token as query parameter.",
             "type": "apiKey",
             "name": "token",
+            "in": "query"
+        },
+        "TokenAuth": {
+            "description": "Direct token in header without prefix.",
+            "type": "apiKey",
+            "name": "Token",
             "in": "header"
         }
     }

@@ -239,6 +239,21 @@ paths:
               msg:
                 type: string
             type: object
+        "401":
+          description: 权限验证失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+              msg:
+                type: string
+            type: object
+      security:
+      - BearerAuth: []
+        QueryAuth: []
+        TokenAuth: []
       summary: 列出所有服务
       tags:
       - 服务管理
@@ -278,6 +293,17 @@ paths:
               msg:
                 type: string
             type: object
+        "401":
+          description: 权限验证失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+              msg:
+                type: string
+            type: object
         "500":
           description: 服务器内部错误
           schema:
@@ -289,6 +315,10 @@ paths:
               msg:
                 type: string
             type: object
+      security:
+      - BearerAuth: []
+        QueryAuth: []
+        TokenAuth: []
       summary: 部署或更新服务
       tags:
       - 服务管理
@@ -328,6 +358,17 @@ paths:
               msg:
                 type: string
             type: object
+        "401":
+          description: 权限验证失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+              msg:
+                type: string
+            type: object
         "500":
           description: 服务器内部错误
           schema:
@@ -339,6 +380,10 @@ paths:
               msg:
                 type: string
             type: object
+      security:
+      - BearerAuth: []
+        QueryAuth: []
+        TokenAuth: []
       summary: 删除指定服务
       tags:
       - 服务管理
@@ -377,6 +422,17 @@ paths:
               msg:
                 type: string
             type: object
+        "401":
+          description: 权限验证失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+              msg:
+                type: string
+            type: object
         "404":
           description: 服务未找到
           schema:
@@ -388,6 +444,10 @@ paths:
               msg:
                 type: string
             type: object
+      security:
+      - BearerAuth: []
+        QueryAuth: []
+        TokenAuth: []
       summary: 获取指定服务详情
       tags:
       - 服务管理
@@ -433,6 +493,17 @@ paths:
               msg:
                 type: string
             type: object
+        "401":
+          description: 权限验证失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+              msg:
+                type: string
+            type: object
         "500":
           description: 服务器内部错误
           schema:
@@ -444,6 +515,10 @@ paths:
               msg:
                 type: string
             type: object
+      security:
+      - BearerAuth: []
+        QueryAuth: []
+        TokenAuth: []
       summary: 服务扩缩容
       tags:
       - 服务管理
@@ -483,6 +558,17 @@ paths:
               msg:
                 type: string
             type: object
+        "401":
+          description: 权限验证失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+              msg:
+                type: string
+            type: object
         "404":
           description: 服务未找到
           schema:
@@ -494,6 +580,10 @@ paths:
               msg:
                 type: string
             type: object
+      security:
+      - BearerAuth: []
+        QueryAuth: []
+        TokenAuth: []
       summary: 获取服务运行状态
       tags:
       - 服务管理
@@ -538,12 +628,38 @@ paths:
               msg:
                 type: string
             type: object
+        "401":
+          description: 权限验证失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+              msg:
+                type: string
+            type: object
+      security:
+      - BearerAuth: []
+        QueryAuth: []
+        TokenAuth: []
       summary: 获取端口代理统计信息
       tags:
       - 服务管理
 securityDefinitions:
-  Dev:
+  BearerAuth:
+    description: 'Enter the token with the `Bearer: ` prefix, e.g. "Bearer abcde12345".'
     in: header
+    name: Authorization
+    type: apiKey
+  QueryAuth:
+    description: Token as query parameter.
+    in: query
     name: token
+    type: apiKey
+  TokenAuth:
+    description: Direct token in header without prefix.
+    in: header
+    name: Token
     type: apiKey
 swagger: "2.0"

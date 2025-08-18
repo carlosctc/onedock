@@ -17,7 +17,9 @@ import (
 // @Param service body models.ServiceRequest true "服务配置信息"
 // @Success 200 {object} object{code=int,data=models.Service,msg=string} "部署成功"
 // @Failure 400 {object} object{code=int,msg=string,data=object} "请求参数错误"
+// @Failure 401 {object} object{code=int,msg=string,data=object} "权限验证失败"
 // @Failure 500 {object} object{code=int,msg=string,data=object} "服务器内部错误"
+// @Security BearerAuth || TokenAuth || QueryAuth
 // @Router /onedock [post]
 func (api *Api) DeployOrUpdateService(c *gin.Context) {
 	var req models.ServiceRequest
@@ -50,6 +52,8 @@ func (api *Api) DeployOrUpdateService(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Success 200 {object} object{code=int,data=object{Services=[]models.Service,Total=int},msg=string} "获取成功"
+// @Failure 401 {object} object{code=int,msg=string,data=object} "权限验证失败"
+// @Security BearerAuth || TokenAuth || QueryAuth
 // @Router /onedock [get]
 func (api *Api) ListServices(c *gin.Context) {
 	ctx := context.Ginform(c)
@@ -75,7 +79,9 @@ func (api *Api) ListServices(c *gin.Context) {
 // @Param name path string true "服务名称" example:"nginx-web"
 // @Success 200 {object} object{code=int,data=models.Service,msg=string} "获取成功"
 // @Failure 400 {object} object{code=int,msg=string,data=object} "请求参数错误"
+// @Failure 401 {object} object{code=int,msg=string,data=object} "权限验证失败"
 // @Failure 404 {object} object{code=int,msg=string,data=object} "服务未找到"
+// @Security BearerAuth || TokenAuth || QueryAuth
 // @Router /onedock/{name} [get]
 func (api *Api) GetService(c *gin.Context) {
 	name := c.Param("name")
@@ -101,7 +107,9 @@ func (api *Api) GetService(c *gin.Context) {
 // @Param name path string true "服务名称" example:"nginx-web"
 // @Success 200 {object} object{code=int,data=object,msg=string} "删除成功"
 // @Failure 400 {object} object{code=int,msg=string,data=object} "请求参数错误"
+// @Failure 401 {object} object{code=int,msg=string,data=object} "权限验证失败"
 // @Failure 500 {object} object{code=int,msg=string,data=object} "服务器内部错误"
+// @Security BearerAuth || TokenAuth || QueryAuth
 // @Router /onedock/{name} [delete]
 func (api *Api) DeleteService(c *gin.Context) {
 	name := c.Param("name")
@@ -129,7 +137,9 @@ func (api *Api) DeleteService(c *gin.Context) {
 // @Param name path string true "服务名称" example:"nginx-web"
 // @Success 200 {object} object{code=int,data=models.ServiceStatusResponse,msg=string} "获取成功"
 // @Failure 400 {object} object{code=int,msg=string,data=object} "请求参数错误"
+// @Failure 401 {object} object{code=int,msg=string,data=object} "权限验证失败"
 // @Failure 404 {object} object{code=int,msg=string,data=object} "服务未找到"
+// @Security BearerAuth || TokenAuth || QueryAuth
 // @Router /onedock/{name}/status [get]
 func (api *Api) GetServiceStatus(c *gin.Context) {
 	name := c.Param("name")
@@ -157,7 +167,9 @@ func (api *Api) GetServiceStatus(c *gin.Context) {
 // @Param scale body models.ScaleRequest true "扩缩容配置"
 // @Success 200 {object} object{code=int,data=object,msg=string} "扩缩容成功"
 // @Failure 400 {object} object{code=int,msg=string,data=object} "请求参数错误"
+// @Failure 401 {object} object{code=int,msg=string,data=object} "权限验证失败"
 // @Failure 500 {object} object{code=int,msg=string,data=object} "服务器内部错误"
+// @Security BearerAuth || TokenAuth || QueryAuth
 // @Router /onedock/{name}/scale [post]
 func (api *Api) ScaleService(c *gin.Context) {
 	name := c.Param("name")
@@ -198,6 +210,8 @@ func (api *Api) ScaleService(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Success 200 {object} object{code=int,data=object,msg=string} "获取成功"
+// @Failure 401 {object} object{code=int,msg=string,data=object} "权限验证失败"
+// @Security BearerAuth || TokenAuth || QueryAuth
 // @Router /onedock/proxy/stats [get]
 func (api *Api) GetProxyStats(c *gin.Context) {
 	ctx := context.Ginform(c)

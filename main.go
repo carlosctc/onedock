@@ -11,9 +11,20 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// @securityDefinitions.apikey Dev
+// @securityDefinitions.apikey BearerAuth
 // @in header
+// @name Authorization
+// @description Enter the token with the `Bearer: ` prefix, e.g. "Bearer abcde12345".
+//
+// @securityDefinitions.apikey TokenAuth
+// @in header
+// @name Token
+// @description Direct token in header without prefix.
+//
+// @securityDefinitions.apikey QueryAuth
+// @in query
 // @name token
+// @description Token as query parameter.
 func main() {
 	igo.App = igo.NewApp("")
 	api.Router(igo.App.Web.Router)
