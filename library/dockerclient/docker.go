@@ -93,7 +93,7 @@ func (dc *DockerClient) CreateContainer(ctx context.IContext, service *Service, 
 	// Docker主机映射端口 - 绑定到0.0.0.0允许外部访问
 	portBindings[containerPort] = []nat.PortBinding{
 		{
-			HostIP:   "0.0.0.0",
+			HostIP:   "127.0.0.1",
 			HostPort: strconv.Itoa(service.DockerPort),
 		},
 	}

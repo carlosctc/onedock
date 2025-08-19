@@ -13,7 +13,7 @@ import (
 type Service struct {
 	Cache        *cache.MemCache
 	dockerClient *dockerclient.DockerClient
-	PortManager  *PortManager
+	PortManager  *PortProxyManager
 }
 
 // NewService
