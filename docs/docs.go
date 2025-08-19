@@ -850,6 +850,12 @@ const docTemplate = `{
                         "type": "string"
                     }
                 },
+                "entrypoint": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "env_file": {
                     "type": "string"
                 },

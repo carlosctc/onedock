@@ -13,7 +13,7 @@ import (
 
 // UpdateService 更新服务 - 实现滚动更新逻辑
 func (s *Service) UpdateService(ctx context.IContext, req *models.ServiceRequest) (*models.Service, error) {
-	// 第一步：获取现有服务
+	//获取现有服务
 	existingService := s.GetService(ctx, req.Name)
 	if existingService == nil {
 		return nil, fmt.Errorf("service %s not found", req.Name)
@@ -21,20 +21,20 @@ func (s *Service) UpdateService(ctx context.IContext, req *models.ServiceRequest
 
 	log.Info("Docker", log.Any("ServiceName", req.Name), log.Any("Message", "开始滚动更新服务"))
 
-	// 第二步：构建新的服务配置
+	//构建新的服务配置
 	newDockerService := &dockerclient.Service{}
 	err := copier.Copy(newDockerService, req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to copy service request: %w", err)
 	}
 
-	// 第三步：获取现有容器列表
+	//获取现有容器列表
 	containers, err := s.dockerClient.ListContainers(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to list containers: %w", err)
 	}
 
-	// 第四步：找到此服务的所有容器并提取旧配置
+	//找到此服务的所有容器并提取旧配置
 	var serviceContainers []dockerclient.ContainerInfo
 	var oldDockerService *dockerclient.Service
 
@@ -66,9 +66,16 @@ func (s *Service) UpdateService(ctx context.IContext, req *models.ServiceRequest
 		return nil, fmt.Errorf("failed to extract old service configuration")
 	}
 
+	//比较配置，检查是否需要更新
+	hasChanges := s.dockerClient.CompareServiceConfig(oldDockerService, newDockerService)
+	if !hasChanges {
+		log.Info("Docker", log.Any("ServiceName", req.Name), log.Any("Message", "服务配置无变化，返回现有服务"))
+		return existingService, nil
+	}
+
 	log.Info("Docker", log.Any("ServiceName", req.Name), log.Any("Message", "检测到配置变化，开始滚动更新"))
 
-	// 第五步：逐个更新容器
+	//逐个更新容器
 	successCount := 0
 
 	for _, container := range serviceContainers {
@@ -100,7 +107,7 @@ func (s *Service) UpdateService(ctx context.IContext, req *models.ServiceRequest
 			log.Any("Success", successCount), log.Any("Message", "部分容器更新失败"))
 	}
 
-	// 第六步：更新端口代理
+	//更新端口代理
 
 	//删除缓存
 	s.DelContainerMapping(ctx, existingService.PublicPort)
@@ -111,7 +118,7 @@ func (s *Service) UpdateService(ctx context.IContext, req *models.ServiceRequest
 		// 端口代理更新失败不影响服务更新结果，记录日志即可
 	}
 
-	// 第七步：返回更新后的服务信息
+	//返回更新后的服务信息
 	updatedService := &models.Service{
 		ID:           existingService.ID,
 		Name:         req.Name,

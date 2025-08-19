@@ -47,6 +47,7 @@ type ServiceRequest struct {
 	Environment  map[string]string `json:"environment" description:"环境变量"`
 	EnvFile      string            `json:"env_file" description:"环境变量文件路径"`
 	Volumes      []VolumeMount     `json:"volumes" description:"卷挂载配置"`
+	Entrypoint   []string          `json:"entrypoint" description:"容器入口点覆盖"`
 	Command      []string          `json:"command" description:"启动命令覆盖"`
 	WorkingDir   string            `json:"working_dir" example:"/app" description:"工作目录"`
 	PublicPort   int               `json:"public_port,omitempty" example:"30000" description:"可选的对外暴露端口，不填则自动分配"`

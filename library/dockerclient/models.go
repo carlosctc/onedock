@@ -13,6 +13,7 @@ type Service struct {
 	Environment  map[string]string // 环境变量
 	EnvFile      string            // 环境变量文件路径
 	Volumes      []VolumeMount     // 卷挂载配置
+	Entrypoint   []string          // 入口
 	Command      []string          // 启动命令
 	WorkingDir   string            // 工作目录
 	Replicas     int               // 副本数量

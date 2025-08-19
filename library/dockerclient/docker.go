@@ -164,6 +164,11 @@ func (dc *DockerClient) CreateContainer(ctx context.IContext, service *Service, 
 		config.Cmd = service.Command
 	}
 
+	// 如果有自定义入口点
+	if len(service.Entrypoint) > 0 {
+		config.Entrypoint = service.Entrypoint
+	}
+
 	// 获取平台适配的主机配置
 	hostConfig := dc.detectPlatform()
 	hostConfig.PortBindings = portBindings
@@ -480,6 +485,7 @@ func (dc *DockerClient) scaleUp(ctx context.IContext, serviceConfig *Service, cu
 			DockerPort:   newDockerPort,
 			Environment:  serviceConfig.Environment,
 			Volumes:      serviceConfig.Volumes,
+			Entrypoint:   serviceConfig.Entrypoint,
 			Command:      serviceConfig.Command,
 			WorkingDir:   serviceConfig.WorkingDir,
 			Replicas:     1,
@@ -607,6 +613,7 @@ func (dc *DockerClient) UpdateContainer(ctx context.IContext, serviceName string
 		Environment:  newService.Environment,
 		EnvFile:      newService.EnvFile,
 		Volumes:      newService.Volumes,
+		Entrypoint:   newService.Entrypoint,
 		Command:      newService.Command,
 		WorkingDir:   newService.WorkingDir,
 		Replicas:     1,

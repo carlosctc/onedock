@@ -109,6 +109,10 @@ definitions:
         items:
           type: string
         type: array
+      entrypoint:
+        items:
+          type: string
+        type: array
       env_file:
         type: string
       environment:

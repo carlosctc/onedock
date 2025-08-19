@@ -50,6 +50,7 @@ type ServiceRequest struct {
 	Environment  map[string]string `json:"environment,omitempty"`
 	EnvFile      string            `json:"env_file,omitempty"`
 	Volumes      []VolumeMount     `json:"volumes,omitempty"`
+	Entrypoint   []string          `json:"entrypoint,omitempty"`
 	Command      []string          `json:"command,omitempty"`
 	WorkingDir   string            `json:"working_dir,omitempty"`
 	PublicPort   int               `json:"public_port,omitempty"`

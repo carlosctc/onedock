@@ -134,6 +134,7 @@ func (dc *DockerClient) ExtractServiceFromContainer(container ContainerInfo) (*S
 		DockerPort:   nameInfo.ContainerPort,
 		Environment:  make(map[string]string), // 无法从容器中完整恢复，使用空值
 		Volumes:      []VolumeMount{},         // 无法从容器中完整恢复，使用空值
+		Entrypoint:   []string{},              // 无法从容器中完整恢复，使用空值
 		Command:      []string{},              // 无法从容器中完整恢复，使用空值
 		WorkingDir:   "",                      // 无法从容器中完整恢复，使用空值
 		Replicas:     1,                       // 单个容器的副本数为1
@@ -247,6 +248,11 @@ func (dc *DockerClient) CompareServiceConfig(oldService, newService *Service) bo
 
 	// 检查卷挂载
 	if !dc.compareVolumes(oldService.Volumes, newService.Volumes) {
+		return true
+	}
+
+	// 检查入口点
+	if !dc.compareCommands(oldService.Entrypoint, newService.Entrypoint) {
 		return true
 	}
 
