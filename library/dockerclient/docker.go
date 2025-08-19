@@ -90,10 +90,10 @@ func (dc *DockerClient) CreateContainer(ctx context.IContext, service *Service, 
 	canUsePort := dc.findAvailablePortForService(latestContainers, service.Name)
 	service.DockerPort = canUsePort
 
-	// Docker主机映射端口 - 绑定到127.0.0.1确保安全性
+	// Docker主机映射端口 - 绑定到0.0.0.0允许外部访问
 	portBindings[containerPort] = []nat.PortBinding{
 		{
-			HostIP:   "127.0.0.1",
+			HostIP:   "0.0.0.0",
 			HostPort: strconv.Itoa(service.DockerPort),
 		},
 	}

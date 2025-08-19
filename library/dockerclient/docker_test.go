@@ -67,7 +67,7 @@ func TestParseContainerName(t *testing.T) {
 	}
 
 	// 测试容器名称解析
-	containerName := "onedock-test-nginx-p8080-c30001-0"
+	containerName := "onedock-ai-shifu-cook-web-dev-p12013-c30004-0"
 	info, err := client.ParseContainerName(containerName)
 	if err != nil {
 		t.Fatalf("容器名称解析失败: %v", err)
